@@ -46,16 +46,24 @@ def home(
     """
     stocks = db.query(Stock)
     if forward_pe:
-        stocks = stocks.filter(Stock.forward_pe <= float(forward_pe))
+        stocks = stocks.filter(Stock.forward_pe >= float(forward_pe))
     if dividend_yield:
-        stocks = stocks.filter(Stock.dividend_yield <= float(dividend_yield))
+        stocks = stocks.filter(Stock.dividend_yield >= float(dividend_yield))
     if ma50 == "on":
         stocks = stocks.filter(Stock.price >= Stock.ma50)
     if ma200 == "on":
         stocks = stocks.filter(Stock.price >= Stock.ma200)
 
     return templates.TemplateResponse(
-        "home.html", {"request": request, "stocks": stocks}
+        "home.html",
+        {
+            "request": request,
+            "stocks": stocks,
+            "forward_pe": forward_pe,
+            "dividend_yield": dividend_yield,
+            "ma50": ma50,
+            "ma200": ma200,
+        },
     )
 
 
